@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response, redirect
+from flask import Flask, render_template, request, make_response, redirect, Response
 from datetime import datetime
 from time import time
 from ad import Ad
@@ -9,16 +9,19 @@ import requests
 
 ads: list[Ad] = []
 
-for adFile in os.listdir("hirdetesek"):
-    with open("hirdetesek/" + adFile, "r") as adF:
-        data = json.loads(adF.read())
-        ads.append(Ad(str(data["name"]), str(data["description"]), int(data["time"]), False))
+if not os.path.exists("hirdetesek"):
+    os.mkdir("hirdetesek")
+else:
+    for adFile in os.listdir("hirdetesek"):
+        with open("hirdetesek/" + adFile, mode="r", encoding="UTF-8") as adF:
+            data = json.loads(adF.read())
+            ads.append(Ad(str(data["name"]), str(data["description"]), int(data["time"]), False))
 
 app = Flask(__name__)
 
 
 @app.route("/", methods=["GET"])
-def home():
+def home() -> str:
     if config.turnstile_enabled:
         turnstile_html = "<div class=\"cf-turnstile\" data-sitekey=" + config.turnstile_sitekey + " data-callback=\"javascriptCallback\"></div>"
     else:
@@ -33,7 +36,7 @@ def home():
 
 
 @app.route("/add-ad", methods=["POST"])
-def add_server():
+def add_server() -> Response:
     resp = make_response()
     try:
         name = request.form['name']
@@ -74,7 +77,9 @@ def add_server():
 
 if config.ssl_type == "self-signed":
     ssl_context = "adhoc"
-else:
+elif config.ssl_type == "custom":
     ssl_context = (config.ssl_cert, config.ssl_key)
+else:
+    ssl_context = None
 
-app.run(host="0.0.0.0", port=8443, ssl_context=ssl_context)
+app.run(host="0.0.0.0", port=config.port, ssl_context=ssl_context)
