@@ -46,8 +46,8 @@ def home() -> str:
 def add_server() -> Response:
     resp = make_response()
     try:
-        name = request.form['name']
-        description = request.form['description']
+        name = request.form['name'].strip()
+        description = request.form['description'].strip()
 
         if name.replace(" ", "").replace("\n", "") == "" \
                 or description.replace(" ", "").replace("\n", "") == "":
@@ -67,7 +67,6 @@ def add_server() -> Response:
         resp.status_code = 400
         resp.response = "Fields too long!"
         return resp
-
 
     if config.turnstile_enabled:
         try:
