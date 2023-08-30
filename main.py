@@ -62,8 +62,8 @@ def add_server() -> Response:
                                   "remoteip": cf_ip
                               }),
                               headers={
-                                  "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
-                              }).text
+                                  "Content-Type": "application/x-www-form-urlencoded"
+                              },).text
             )
 
             print(json.dumps(resp_json))
