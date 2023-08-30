@@ -60,7 +60,10 @@ def add_server() -> Response:
                                   "secret": config.turnstile_secretkey,
                                   "response": tkn,
                                   "remoteip": cf_ip
-                              })).text
+                              }),
+                              headers={
+                                  "Content-Type": "application/json"
+                              }).text
             )
 
             print(json.dumps(resp_json))
