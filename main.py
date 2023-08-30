@@ -56,11 +56,7 @@ def add_server() -> Response:
             print(tkn)
             resp_json = json.loads(
                 requests.post(url="https://challenges.cloudflare.com/turnstile/v0/siteverify",
-                              data=json.dumps({
-                                  "secret": config.turnstile_secretkey,
-                                  "response": tkn,
-                                  "remoteip": cf_ip
-                              }),
+                              data=f"secret={config.turnstile_secretkey}&response={tkn}&remoteip={cf_ip}",
                               headers={
                                   "Content-Type": "application/x-www-form-urlencoded"
                               },).text
