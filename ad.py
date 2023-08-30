@@ -9,10 +9,14 @@ def next_id() -> int:
         if not file.endswith(".json"):
             continue
 
+        print(file)
+
         try:
-            highest_id = int(file.replace(".json", ""))
+            file_id = int(file.replace(".json", ""))
+            if file_id > highest_id:
+                highest_id = file_id
         except:
-            pass
+            continue
 
     return highest_id + 1
 

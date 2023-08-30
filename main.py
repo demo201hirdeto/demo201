@@ -19,6 +19,8 @@ else:
 
 app = Flask(__name__)
 
+ads = sorted(ads, key=lambda inst: inst.time)
+
 
 @app.route("/", methods=["GET"])
 def home() -> str:
