@@ -1,5 +1,12 @@
 
 """
+Website settings
+"""
+
+title: str = "Demo201 Hirdető"
+heading: str = "ITT TUTSZ SZERVERT HÍRDETNI ODA A EMAIL CIMHEZ BE ÍROD HIRDET@OLDAL.HU ÉS A NÉVHEZ MEG BE ÍROD AMIT AKKARSZ AZ ÜZENÖ FALNÁL ODA CSAK A NEVET ÍRD MEG A EMAIL CIMEDET ÉS KÉSZ"
+
+"""
 Port to run the webserver on.
 """
 

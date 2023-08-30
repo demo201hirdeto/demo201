@@ -25,16 +25,21 @@ ads = sorted(ads, key=lambda inst: inst.time)
 @app.route("/", methods=["GET"])
 def home() -> str:
     if config.turnstile_enabled:
-        turnstile_html = "<div class=\"cf-turnstile\" data-sitekey=" + config.turnstile_sitekey + " data-callback=\"javascriptCallback\"></div>"
+        turnstile_html = f"<div class=\"cf-turnstile\" data-sitekey={config.turnstile_sitekey} data-callback=\"javascriptCallback\"></div>"
     else:
         turnstile_html = ""
-    adsHTML = "<br><hr><br><h1>Hirdetések</h1><br><hr><br>"
-    for ad in ads[::-1]:
-        date_time = datetime.fromtimestamp(ad.time)
-        adsHTML = adsHTML + "<strong>" + ad.name + " - " + str(
-            date_time) + "</strong><br>" + "<p>" + ad.description + "</p><br><hr>"
 
-    return render_template("index.html", ads=adsHTML, turnstile_html=turnstile_html)
+    adsHTML = ""
+    for ad in ads[::-1]:
+        date_time = str(datetime.fromtimestamp(ad.time))
+        adsHTML = adsHTML + f"<b> {ad.name} <font color=\"#999999\">[ {date_time} ]</font></b><br><br>" + ad.description.replace(
+            '\n', '<br>') + "<br><br>"
+
+    return render_template("index.html",
+                           ads=adsHTML,
+                           turnstile_html=turnstile_html,
+                           title=config.title,
+                           heading=config.heading)
 
 
 @app.route("/add-ad", methods=["POST"])
@@ -44,12 +49,25 @@ def add_server() -> Response:
         name = request.form['name']
         description = request.form['description']
 
+        if name.replace(" ", "").replace("\n", "") == "" \
+                or description.replace(" ", "").replace("\n", "") == "":
+            raise Exception("blank fields :(")
+
         name = name.replace("<", "\\<").replace(">", "\\>")
         description = description.replace("<", "\\<").replace(">", "\\>")
     except:
         resp.status_code = 400
         resp.response = "Blank fields!"
         return resp
+
+    try:
+        if len(name) > 50 or len(description) > 4000:
+            raise Exception("fields too long :(")
+    except:
+        resp.status_code = 400
+        resp.response = "Fields too long!"
+        return resp
+
 
     if config.turnstile_enabled:
         try:
@@ -61,7 +79,7 @@ def add_server() -> Response:
                               data=f"secret={config.turnstile_secretkey}&response={tkn}&remoteip={cf_ip}",
                               headers={
                                   "Content-Type": "application/x-www-form-urlencoded"
-                              },).text
+                              }, ).text
             )
 
             print(json.dumps(resp_json))

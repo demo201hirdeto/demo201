@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Demo201 Hirdető</title>
+        <title>{{title}}</title>
         <meta charset="UTF-8">
-        <style>
-            form {
-                border-width:3px;
-                border-radius: 1%;
-                border-style:solid;
-                border-color:black;
-                background-color: silver;
-            }
-        </style>
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
     </head>
     <body>
-        <center>
-            <form action="/add-ad" method="post">
-                <h1>
-                    Hirdess te is!
-                </h1>
-                <label for="name">Hirdetés név:</label><br>
-                <input type="text" name="name" id="name"><br>
-                <label for="description">Hirdetés leírás:</label><br>
-                <textarea rows="5" cols="60" name="description" id="description"></textarea><br>
-                {{turnstile_html|safe}}
-                <input type="submit">
-            </form>
-            {{ads|safe}}
-        </center>
+    <center>
+        <span style="font-size: large;">{{heading}}</span>
+        <table border="0" width="90%" cellpadding="0" cellspacing="0">
+        <tbody>
+        <tr>
+        <td>
+        <div style="border-color:#000000;border-style:solid;border-width:1px">
+        <div style="padding:3;background:#000000;color:#FFFFFF;text-align:left;font-size:20px">
+        <b>Szólj hozzá</b>
+        </div>
+        <div style="padding:3;background:#DDDDDD;color:#555555;text-align:left">
+        <br>
+        <form action="/add-ad" method="post">
+        <table border="0" cellpadding="5" cellspacing="0">
+        <tbody><tr><td>Név:</td><td>
+        <input type="text" class="grayinput" name="name" size="60"></td>
+        </tr>
+        <tr><td>E-mail címed:</td><td>
+        <input type="text" class="grayinput" name="email" size="60"><br>Az e-mail címed <b>nem</b> jelenik meg az oldalon</td>
+        </tr><tr><td valign="top">Szöveg:</td>
+        <td><textarea name="description" class="graytextarea" cols="60" rows="9"></textarea>
+        </td></tr><tr><td></td>
+        {{turnstile_html|safe}}</td>
+        </tr><tr><td></td><td><input type="submit" value="Mehet"></td></tr>
+        </tbody></table></form></div><br><br><div style="padding:5;background:white;color:#444444;text-align:left">{{ads|safe}}</div><br>
     </body>
 </html>
