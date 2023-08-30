@@ -7,7 +7,7 @@ import json
 import config
 import requests
 
-ads: list[Ad] = []
+ads: list = []
 
 if not os.path.exists("hirdetesek"):
     os.mkdir("hirdetesek")
@@ -62,7 +62,7 @@ def add_server() -> Response:
                                   "remoteip": cf_ip
                               }),
                               headers={
-                                  "Content-Type": "application/json"
+                                  "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"
                               }).text
             )
 
