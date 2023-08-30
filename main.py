@@ -51,7 +51,7 @@ def add_server() -> Response:
 
     if config.turnstile_enabled:
         try:
-            tkn = request.form['cf-turnstile-response']
+            tkn = request.form.get('cf-turnstile-response')
             cf_ip = request.headers.get("CF-Connecting-IP")
             print(tkn)
             resp_json = json.loads(
