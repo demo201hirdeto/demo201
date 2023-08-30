@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, make_response
+from flask import Flask, render_template, request, make_response, redirect
 from datetime import datetime
 from time import time
 from ad import Ad
@@ -32,12 +32,15 @@ def home():
     return render_template("index.html", ads=adsHTML, turnstile_html=turnstile_html)
 
 
-@app.route("/add-server", methods=["POST"])
+@app.route("/add-ad", methods=["POST"])
 def add_server():
     resp = make_response()
     try:
-        print(request.form['name'])
-        print(request.form['description'])
+        name = request.form['name']
+        description = request.form['description']
+
+        name = name.replace("<", "\\<").replace(">", "\\>")
+        description = description.replace("<", "\\<").replace(">", "\\>")
     except:
         resp.status_code = 400
         resp.response = "Blank fields!"
@@ -63,10 +66,10 @@ def add_server():
             resp.response = "Captcha invalid!"
             return resp
 
-    ads.append(Ad(request.form['name'], request.form['description'], int(time()), True))
-    resp.status_code = 200
-    resp.response = "nigga"
-    return resp
+    print(name)
+    print(description)
+    ads.append(Ad(name, description, int(time()), True))
+    return redirect("/", code=301)
 
 
 if config.ssl_type == "self-signed":
