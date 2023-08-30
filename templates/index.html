@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            form {
+                border-width:3px;
+                border-radius: 1%;
+                border-style:solid;
+                border-color:black;
+                background-color: silver;
+            }
+        </style>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+    </head>
+    <body>
+        <center>
+            <form action="/add-server" method="post">
+                <h1>
+                    Hirdess te is!
+                </h1>
+                <label for="name">Hirdetés név:</label><br>
+                <input type="text" name="name" id="name"><br>
+                <label for="description">Hirdetés leírás:</label><br>
+                <textarea rows="5" cols="60" name="description" id="description"></textarea><br>
+                {{turnstile_html|safe}}
+                <input type="submit">
+            </form>
+            {{ads|safe}}
+        </center>
+    </body>
+</html>
