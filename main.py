@@ -67,6 +67,9 @@ def add_server() -> Response:
             )
 
             print(json.dumps(resp_json))
+
+            if not resp_json["success"]:
+                raise Exception("invalid captcha :(")
         except:
             resp.status_code = 400
             resp.response = "Captcha invalid!"
