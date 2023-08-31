@@ -62,8 +62,8 @@ def home() -> str:
             adsHTML += "<br><hr>"
 
         date_time = str(datetime.fromtimestamp(ad.time))
-        adsHTML = adsHTML + f"<br><b> {ad.name} <font color=\"#999999\">[ {date_time} ]</font></b><br><br>" + ad.description.replace(
-            '\n', '<br>')
+        adsHTML = adsHTML + f"<br><b> <div class=\"setbyuser\">{ad.name}</div> <font color=\"#999999\">[ {date_time} ]</font></b><br><br><div class=\"setbyuser\">" + ad.description.replace(
+            '\n', '<br>') + "</div>"
 
         adsHTML += "<br>"
 
