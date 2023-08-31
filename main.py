@@ -6,8 +6,30 @@ import os
 import json
 import config
 import requests
+import pytz
 
 ads: list = []
+
+
+def ma_nap_magyar_gmt_plus_2():
+    # Nap nevek magyar fordításban
+    nap_nevek = ["hétfő", "kedd", "szerda", "csütörtök", "péntek", "szombat", "vasárnap"]
+
+    # Jelenlegi dátum és idő lekérése
+    aktualis_datumido = datetime.now()
+
+    # GMT+2 időzóna beállítása
+    gmt_plus_2 = pytz.timezone('Etc/GMT+2')
+
+    # Jelenlegi dátum és idő átkonvertálása a GMT+2 időzónába
+    gmt_plus_2_datumido = aktualis_datumido.astimezone(gmt_plus_2)
+
+    # A hét napjának meghatározása és visszaadása
+    nap_index = gmt_plus_2_datumido.weekday()
+    nap_magyar = nap_nevek[nap_index]
+
+    return nap_magyar
+
 
 if not os.path.exists("hirdetesek"):
     os.mkdir("hirdetesek")
@@ -25,21 +47,33 @@ ads = sorted(ads, key=lambda inst: inst.time)
 @app.route("/", methods=["GET"])
 def home() -> str:
     if config.turnstile_enabled:
+        captcha_name = "Captcha:"
         turnstile_html = f"<div class=\"cf-turnstile\" data-sitekey={config.turnstile_sitekey} data-callback=\"javascriptCallback\"></div>"
     else:
-        turnstile_html = ""
+        captcha_name = "Milyen nap van ma magyarországon?"
+        turnstile_html = "<input type=\"text\" class=\"grayinput\" name=\"mai-nap\" size=\"60\" maxlength=\"100\">"
 
-    adsHTML = ""
+    adsHTML = "<div style=\"border-color:#ffffff;border-style:solid;border-width:3px\">"
+    i = 0
     for ad in ads[::-1]:
-        date_time = str(datetime.fromtimestamp(ad.time))
-        adsHTML = adsHTML + f"<b> {ad.name} <font color=\"#999999\">[ {date_time} ]</font></b><br><br>" + ad.description.replace(
-            '\n', '<br>') + "<br><br>"
+        i += 1
 
+        if i > 1:
+            adsHTML += "<br><hr>"
+
+        date_time = str(datetime.fromtimestamp(ad.time))
+        adsHTML = adsHTML + f"<br><b> {ad.name} <font color=\"#999999\">[ {date_time} ]</font></b><br><br>" + ad.description.replace(
+            '\n', '<br>')
+
+        adsHTML += "<br>"
+
+    adsHTML += "</div>"
     return render_template("index.html",
                            ads=adsHTML,
                            turnstile_html=turnstile_html,
                            title=config.title,
-                           heading=config.heading)
+                           heading=config.heading,
+                           captcha_name=captcha_name)
 
 
 @app.route("/add-ad", methods=["POST"])
@@ -89,9 +123,16 @@ def add_server() -> Response:
             resp.status_code = 400
             resp.response = "Captcha invalid!"
             return resp
+    else:
+        try:
+            mainap = request.form.get('mai-nap')
+            if not mainap.strip() == ma_nap_magyar_gmt_plus_2().strip():
+                raise Exception("Captcha invalid :(")
+        except:
+            resp.status_code = 400
+            resp.response = "Captcha invalid!"
+            return resp
 
-    print(name)
-    print(description)
     ads.append(Ad(name, description, int(time()), True))
     return redirect("/", code=301)
 

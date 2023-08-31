@@ -4,32 +4,236 @@
         <title>{{title}}</title>
         <meta charset="UTF-8">
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <style>
+ body {font-family: arial, verdana; font-size: 12;  color: #000000; text-decoration: none; }
+ td {font-family: arial, verdana; font-size: 12;  color: #000000; text-decoration: none;}
+ a {font-family: arial, verdana; /*font-size: 12;*/  color: #2222FF; text-decoration: none;}
+ a:hover {font-family: arial, verdana; /*font-size: 12; */ color: orange; }
+ h1 {font-family: arial, verdana; font-size: 20;  color: #990000; text-decoration: none;}
+ .grayinput {font-family: arial, verdana;font-size: 11px; background-color: #EEEEEE; height: 18px; padding: 1px 1px;padding-bottom:2px; margin: 0px; color: #333333; border-left:1px solid #bbbbbb; border-right:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; border-top:1px solid #bbbbbb;}
+ .graytextarea {font-family: arial, verdana;font-size: 11px; background-color: #EEEEEE; padding: 1px 1px;padding-bottom:2px; margin: 0px; color: #333333; border-left:1px solid #bbbbbb; border-right:1px solid #bbbbbb; border-bottom:1px solid #bbbbbb; border-top:1px solid #bbbbbb;}
+
+ .box {
+	border: 5px solid #FF695E;
+	margin-bottom: 5px;
+	background-color: white;
+}
+
+#menu a {
+	display: block;
+	padding: 5px 0 5px 25px;
+	text-decoration: none;
+}
+
+#menu a:hover {
+	color: white;
+	background: #FF695E;
+}
+.overflow{
+	overflow: hidden;
+	width: 100%;
+        text-overflow: ellipsis;
+}
+
+.lcdstyle{ /*Example CSS to create LCD countdown look*/
+background-color:white;
+color:#ff4400;
+font: 30px Impact;
+padding: 3px;
+}
+
+.lcdstyle sup{ /*Example CSS to create LCD countdown look*/
+font-size: 80%
+}
+
+</style>
+
+<style>
+#fix /*,#fix2*/
+{
+height:20px;
+background:#eee;
+color:black;
+text-align:right;
+padding-right:50px;
+padding-top:1px;
+padding-bottom:5px;
+position:fixed;
+width:100%;
+z-index:9999;
+top:0px;
+left:0px;
+border-bottom:1px solid #777;
+-webkit-box-shadow:0 5px 10px rgba(51, 51, 51, 0.7);
+-moz-box-shadow:0 5px 10px rgba(51, 51, 51, 0.7);
+box-shadow:0 5px 10px rgba(51, 51, 51, 0.7);
+}
+
+/*#fix2
+{
+padding-top:4px;
+border-top:1px solid #777;
+border-bottom:0px solid #777;
+text-align:center;
+position:fixed;
+top:100%;
+margin-top:-25px;
+-webkit-box-shadow:0 -5px 10px rgba(51, 51, 51, 0.7);
+-moz-box-shadow:0 -5px 10px rgba(51, 51, 51, 0.7);
+box-shadow:0 -5px 10px rgba(51, 51, 51, 0.7);
+}
+*/
+/*
+#fix #ljelent a
+{
+padding:1px;
+padding-left:1px;
+padding-right:1px;
+margin-right:2px;
+background:#cccccc;
+border:1px outset #bbb;
+color:white;
+cursor:pointer;
+font-weight:bold;
+-webkit-transition: all .4s ease-in-out;
+-moz-transition: all .4s ease-in-out;
+}
+*/
+a#ljelent
+{
+padding:2px;
+padding-left:5px;
+padding-right:5px;
+background:#ccc;
+border:1px outset gray;
+margin-right:10px;
+color:white;
+cursor:pointer;
+font-weight:bold;
+-webkit-transition: all .4s ease-in-out;
+-moz-transition: all .4s ease-in-out;
+}
+
+
+#ljelent:hover
+{
+background:red;
+}
+/*
+#fix #ljelent a:hover
+{
+background:#777;
+}
+*/
+#alsobox
+{
+display:none;
+width:200px;
+border:1px solid #ccc;
+border-top:1px solid #aaa;
+border-left:1px solid #aaa;
+background:rgba(255,255,255,0.76);
+bottom:4px;
+right:200px;
+padding:0px;
+margin-bottom:-204px;
+margin-right:200px;
+-webkit-box-shadow:8px 8px 8px rgba(0, 0, 0, 0.8);
+-moz-box-shadow:8px 8px 10px rgba(0, 0, 0, 0.8);
+box-shadow:8px 8px 10px rgba(0, 0, 0, 0.8);
+-webkit-border-top-left-radius: 5px;
+-webkit-border-top-right-radius: 5px;
+-moz-border-radius-topleft: 5px;
+-moz-border-radius-topright: 5px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+}
+
+#alsobox {position: absolute; right: 2px; bottom: 4px;}
+body > div#alsobox {position: fixed;}
+
+#feje
+{
+background:#990000;
+padding:2px;
+text-align:center;
+color:white;
+-webkit-border-top-left-radius: 5px;
+-webkit-border-top-right-radius: 5px;
+-moz-border-radius-topleft: 5px;
+-moz-border-radius-topright: 5px;
+border-top-left-radius: 5px;
+border-top-right-radius: 5px;
+}
+#fixfuggo
+{
+display:none;
+width:125px;
+padding:3px;
+background:white;
+position:absolute;
+z-index:1000;
+top:40px;
+right:10px;
+
+border:1px solid #777;
+-webkit-box-shadow:5px 5px 10px rgba(51, 51, 51, 0.7);
+-moz-box-shadow:5px 5px 10px rgba(51, 51, 51, 0.7);
+box-shadow:5px 5px 10px rgba(51, 51, 51, 0.7);
+-webkit-border-radius: .5em;
+-moz-border-radius: .5em;
+}
+body > div#fixfuggo { position: fixed;  }
+p
+{
+margin:0px;
+}
+</style>
     </head>
     <body>
     <center>
-        <span style="font-size: large;">{{heading}}</span>
-        <table border="0" width="90%" cellpadding="0" cellspacing="0">
-        <tbody>
+        <table border="0" cellpadding="0" cellspacing="0" width="740">
+        <tbody><tr><td width="301" height="200" background="/static/vezerlo.jpg">
+        </td>
+        <td width="1" bgcolor="white"></td>
+        <td width="438" bgcolor="#000000">
+        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tbody><tr><td height="100" valign="top"><div style="padding:10"><font color="#FFFFFF" size="4"><b>vezerlo</b></font></div></td></tr>
+        <tr><td height="100" valign="bottom" align="right"><div style="padding:10"><font color="#FFFFFF" size="2"><b>*Üdvözölek a sa-mp szerver hírdetőbe</b></font></div></td></tr>
+        </tbody></table>
+
+        </td>
+        </tr>
+        </tbody></table>
+        <table border="0" width="780" cellpadding="0" cellspacing="0">
+        <tbody><tr>
+        <table border="0" width="40%" cellpadding="0" cellspacing="0">
+        <p><span style="font-size: large;">{{heading}}</span></p>
         <tr>
         <td>
         <div style="border-color:#000000;border-style:solid;border-width:1px">
         <div style="padding:3;background:#000000;color:#FFFFFF;text-align:left;font-size:20px">
-        <b>Szólj hozzá</b>
+        <div style="border-color:#000000;border-style:solid;border-width:3px"><b>Szólj hozzá</b></div>
         </div>
         <div style="padding:3;background:#DDDDDD;color:#555555;text-align:left">
         <br>
         <form action="/add-ad" method="post">
         <table border="0" cellpadding="5" cellspacing="0">
         <tbody><tr><td>Név:</td><td>
-        <input type="text" class="grayinput" name="name" size="60"></td>
+        <input type="text" class="grayinput" name="name" size="60" maxlength="50"></td>
         </tr>
         <tr><td>E-mail címed:</td><td>
-        <input type="text" class="grayinput" name="email" size="60"><br>Az e-mail címed <b>nem</b> jelenik meg az oldalon</td>
+        <input type="text" class="grayinput" name="email" size="60" maxlength="100"><br>Az e-mail címed <b>nem</b> jelenik meg az oldalon</td>
         </tr><tr><td valign="top">Szöveg:</td>
-        <td><textarea name="description" class="graytextarea" cols="60" rows="9"></textarea>
+        <td><textarea name="description" class="graytextarea" cols="59" rows="9" maxlength="4000"></textarea>
         </td></tr><tr><td></td>
-        </tr><tr><td valign="top">Captcha:</td><td>{{turnstile_html|safe}}</td>
+        </tr><tr><td valign="top">{{captcha_name}}</td><td>{{turnstile_html|safe}}</td>
         </tr><tr><td></td><td><input type="submit" value="Mehet"></td></tr>
-        </tbody></table></form></div><br><br><div style="padding:5;background:white;color:#444444;text-align:left">{{ads|safe}}</div><br>
+        </table></form></div><br><br><div style="padding:5;background:white;color:#444444;text-align:left">{{ads|safe}}</div><br>
+        </div>
+        </table>
+        </tr></tbody>
+        </table></center>
     </body>
 </html>

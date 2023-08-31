@@ -26,7 +26,7 @@ ssl_key: str = "key.pem"
 """
 CAPTCHA SETTINGS
 
-It's highly recommended to enable turnstile.
+It's highly recommended to enable turnstile. Otherwise the captcha will switch to our beloved, what's today's name?
 Turnstile is really cool. Generate your keys here: https://dash.cloudflare.com/?to=/:account/turnstile/add
 
 IMPORTANT: DO NOT SHARE your secret key!
