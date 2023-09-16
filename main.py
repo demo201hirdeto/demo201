@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, make_response, redirect, Response
 from datetime import datetime
-from time import time
+from threading import Thread
+from time import time, sleep
 from ad import Ad
-import os
-import json
-import config
 import requests
+import config
+import json
 import pytz
+import os
 
 ads: list = []
 
@@ -68,12 +69,22 @@ def home() -> str:
         adsHTML += "<br>"
 
     adsHTML += "</div>"
+    word_wrap = ""
+    if config.ad_word_wrap:
+        word_wrap = \
+            """
+                .setbyuser {
+                  word-wrap: break-word;
+                  width: 650px;
+                }
+            """
     return render_template("index.html",
                            ads=adsHTML,
                            turnstile_html=turnstile_html,
                            title=config.title,
                            heading=config.heading,
-                           captcha_name=captcha_name)
+                           captcha_name=captcha_name,
+                           word_wrap=word_wrap)
 
 
 @app.route("/add-ad", methods=["POST"])
@@ -144,4 +155,28 @@ elif config.ssl_type == "custom":
 else:
     ssl_context = None
 
-app.run(host="0.0.0.0", port=config.port, ssl_context=ssl_context)
+
+def start_flask():
+    app.run(host="0.0.0.0", port=config.port, ssl_context=ssl_context, debug=False)
+
+
+flask_thread = Thread(target=start_flask)
+flask_thread.daemon = True
+
+
+def restarter():
+    start_time = time()
+    restart_seconds = config.restart_hours * 60 * 60
+    while True:
+        sleep(0.1)
+        if time() - start_time >= restart_seconds:
+            exit(-60000001)
+
+
+if config.restart_hours != -1:
+    flask_thread.start()
+    restarter()
+else:
+    flask_thread.daemon = False
+    flask_thread.run()
+

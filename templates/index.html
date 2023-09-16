@@ -6,10 +6,7 @@
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" defer></script>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>
-        .setbyuser {
-          word-wrap: break-word;
-          width: 650px;
-        }
+        {{ word_wrap | safe }}
         .headerxd {
           word-wrap: break-word;
           width: 550px;
